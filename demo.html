@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        table{
+            width: 600px;
+            border:1px solid #ccc;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        table tr{
+            border:1px solid #ccc;
+        }
+        table th{
+            font-size: 20px;
+            text-align: center;
+        }
+        table td{
+            font-size: 18px;
+            text-align: center;
+            line-height: 30px;
+        }
+        #add,#reduce{
+            cursor: pointer;
+        }
+        #app4{
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="app1">-->
+    <!--<div>{{message}}</div>-->
+    <!--<div>{{reverseMessage}}</div>-->
+<!--</div>-->
+
+<!--<div id="app2">-->
+    <!--<div>数字1：{{num1}}</div>-->
+    <!--<div>数字2：{{num2}}</div>-->
+    <!--<div>和</div>-->
+<!--</div>-->
+
+<!--<table id="app3">-->
+    <!--<tr>-->
+        <!--<th>单价</th>-->
+        <!--<th>操作</th>-->
+        <!--<th>数量</th>-->
+        <!--<th>操作</th>-->
+        <!--<th>总价</th>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--<td>{{price}}</td>-->
+        <!--<td id="reduce" @mousedown.prevent="dec">-</td>-->
+        <!--<td>{{count}}</td>-->
+        <!--<td id="add" @mousedown.prevent="add">+</td>-->
+        <!--<td>{{total}}</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+        <!--&lt;!&ndash;<td colspan="6">&ndash;&gt;-->
+            <!--&lt;!&ndash;总价：&ndash;&gt;-->
+        <!--&lt;!&ndash;</td>&ndash;&gt;-->
+    <!--</tr>-->
+<!--</table>-->
+
+<table id="app4">
+    <tr>
+        <th>选择</th>
+        <th>名称</th>
+        <th>单价</th>
+        <th>操作</th>
+        <th>数量</th>
+        <th>操作</th>
+        <th>总价</th>
+    </tr>
+    <tr v-for="obj in goods">
+        <td>
+            <input type="checkbox" :value="obj.name" v-model="choose">
+        </td>
+        <td>{{obj.name}}</td>
+        <td>{{obj.price}}</td>
+        <td id="reduce" @mousedown.prevent="dec(obj)">-</td>
+        <td>{{obj.count}}</td>
+        <td id="reduce" @mousedown.prevent="add(obj)">+</td>
+        <td>{{getPrice(obj)}}</td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            {{choosestr}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            合计：{{total}}
+        </td>
+    </tr>
+</table>
+</body>
+
+<script src="vue.js"></script>
+<script>
+    // new Vue({
+    //
+    // })
+    // new Vue({
+    //     el:"#app2",
+    //
+    //     methds:{
+    //         add:function () {
+    //
+    //         }
+    //     }
+    // })
+
+    // new Vue({
+    //     el:"#app3",
+    //     data:{
+    //         price:50,
+    //         count:0
+    //     },
+    //     computed:{
+    //         total:function () {
+    //             return total=this.price*this.count
+    //         }
+    //     },
+    //     methods:{
+    //         add:function () {
+    //             // alert(1);
+    //             this.count++;
+    //             // alert(count)
+    //         },
+    //         dec:function () {
+    //             this.count>0?this.count--:"";
+    //         }
+    //     }
+    // })
+
+    new Vue({
+        el:"#app4",
+        data:{
+            // price:50,
+            // count:0,
+            goods:[{name:"香蕉",price:"20",count:0},{name:"苹果",price:"35",count:0},{name:"梨",price:"30",count:0},{name:"桃子",price:"25",count:0}],
+            choose:[]
+        },
+        computed:{
+            total:function () {
+                var total=0;
+                var goodsArr=this.goods.filter((v)=>{
+                    return this.choose.includes(v.name)
+                })//过滤 被选中的
+                goodsArr.forEach((obj)=>{
+                    total+=obj.price*obj.count;
+                })
+                return total;
+            },
+            choosestr:function () {
+                return this.choose.join("、")
+            }
+        },
+        methods:{
+            add:function (obj) {
+                // alert(1);
+                obj.count++;
+            },
+            dec:function (obj) {
+                obj.count>0?obj.count--:"";
+            },
+            getPrice:function (obj) {
+                return obj.price*obj.count;
+            }
+        }
+    })
+</script>
+</html>
